@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "2.2",
+  "description": "Validate config, restart NGINX and verify it serves traffic.",
+  "mainSteps": [
+    {
+      "action": "aws:runShellScript",
+      "name": "restartNginx",
+      "inputs": {
+        "timeoutSeconds": "60",
+        "runCommand": [
+          "#!/bin/bash",
+          "set -e",
+          "nginx -t",
+          "systemctl restart nginx",
+          "sleep 2",
+          "systemctl is-active nginx",
+          "curl -fsS -o /dev/null http://localhost/ && echo 'NGINX restarted and responding on port 80'"
+        ]
+      }
+    }
+  ]
+}
